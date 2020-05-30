@@ -16,7 +16,53 @@ class BinarySearchTree {
   }
 
   insert(key, value = true) {
-    // TODO
+
+    if (this._root === undefined) {
+      this._root = new this.Node({key, value, undefined, undefined, undefined});
+      this._count += 1;
+      return 
+    } 
+    
+    let node = this._root;
+    while (node) {
+      if (node.key === key) {
+        node.value = value
+        return
+      } else if (node.key > key && node.left != undefined) {
+        node = node.left;
+      } else if (node.key < key && node.right != undefined) {
+        node = node.right
+      } else {
+        const newNode = new this.Node({key, value, node, undefined, undefined})
+        this._count += 1
+        if (key > node.key) {
+          node.right = newNode;
+        } else {
+          node.left = newNode;
+        }
+        return
+      }
+    }
+  }
+
+  insertHelper(targetKey, currNode, newValue) {
+    if (targetKey === currNode.key) {
+      currNode.value = newValue;
+      return 
+    } else if (currNode.key > targetKey && currNode.left != undefined) {
+      this.insertHelper(targetKey, currNode.left, newValue);
+    } else if  (currNode.key < targetKey && currNode.right != undefined) {
+      this.insertHelper(targetKey, currNode.right, newValue);
+    } else { // curr.left or curr.right is undefined
+
+      const newNode = new this.Node({targetKey, newValue, currNode, undefined, undefined});
+      if (targetKey < currNode.key) {
+        currNode.left = newNode;
+      } else {
+        currNode.right = newNode;
+      }
+      this._count += 1
+    }
   }
 
   lookup(key) {
